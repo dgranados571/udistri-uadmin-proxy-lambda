@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  udistri-uadmin-proxy-lambda
+  Sample SAM Template for udistri-uadmin-proxy-lambda
+  
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  LambdaUnAdminFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambda-uadmin/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        UnAdminProxy:
+          Type: Api
+          Properties:
+            Path: /unadmin
+            Method: post
+
+Outputs:
+  UnAdminApi:
+    Description: "API Gateway endpoint URL for Prod stage for LambdaUnAdminFunction function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/unadmin/"
+  LambdaUnAdminFunction:
+    Description: "UnAdmin Lambda Function ARN"
+    Value: !GetAtt LambdaUnAdminFunction.Arn
+  LambdaUnAdminFunctionIamRole:
+    Description: "Implicit IAM Role created for LambdaUnAdminFunction function"
+    Value: !GetAtt LambdaUnAdminFunctionRole.Arn
