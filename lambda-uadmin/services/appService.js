@@ -1,6 +1,6 @@
 const axios = require('axios');
 let response;
-exports.loginAppService = async (result) => {
+exports.AppService = async (result) => {
     try {
         const url = `http://54.210.214.166:8080${result.urlPath}`;
         console.log(url);

@@ -1,12 +1,12 @@
 const multipart = require('aws-lambda-multipart-parser');
-const { loginAppService } = require('./services/loginAppService');
+const { AppService } = require('./services/appService');
 let response;
 exports.lambdaHandler = async (event, context) => {
     console.log('START Lambda Control');
     try {
         const result = multipart.parse(event, false);
         if (!!result.body) {
-            const resObj = await loginAppService(result);
+            const resObj = await AppService(result);
             console.log(resObj);
             const {estado, mensaje, objeto} = resObj.body;
             response = responseObject(estado, mensaje, objeto);
