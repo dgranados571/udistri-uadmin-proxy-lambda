@@ -5,10 +5,9 @@ exports.AppService = async (result) => {
     try {
         let url = `http://54.210.214.166:8080${result.urlPath}`;
         let rqService;
+        url = `${url}?body=${result.body}`;
         if (!!result.files) {
-            // REVISAR SIGUIEN URL para envio de Archivos.
-            // https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
-            url = `${url}?body=${result.body}`;
+
         } else {
             rqService = JSON.parse(result.body);
         }
@@ -54,3 +53,6 @@ const responseObject = (estado, mensaje, objeto) => {
         }
     }
 }
+
+// REVISAR SIGUIEN URL para envio de Archivos.
+// https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers

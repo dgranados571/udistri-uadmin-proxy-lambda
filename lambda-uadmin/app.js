@@ -7,9 +7,9 @@ exports.lambdaHandler = async (event, context) => {
         const result = multipart.parse(event, false);
         if (!!result.body) {
             const resObj = await AppService(result);
-            console.log(resObj);
-            const {estado, mensaje, objeto} = resObj.body;
+            const { estado, mensaje, objeto } = resObj.body;
             response = responseObject(estado, mensaje, objeto);
+            console.log(response);
         } else {
             response = responseObject(false, 'Error --> Sin parametro body', null);
         }
