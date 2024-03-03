@@ -1,11 +1,21 @@
 const axios = require('axios');
+const fs = require('fs');
 let response;
 exports.AppService = async (result) => {
     try {
-        const url = `http://54.210.214.166:8080${result.urlPath}`;
+        let url = `http://54.210.214.166:8080${result.urlPath}`;
+        let rqService;
+        if (!!result.files) {
+            // REVISAR SIGUIEN URL para envio de Archivos.
+            // https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
+            url = `${url}?body=${result.body}`;
+        } else {
+            rqService = JSON.parse(result.body);
+        }
         console.log(url);
         console.log(JSON.parse(result.body));
-        const ret = await axios.post(url, JSON.parse(result.body), {
+        const ret = await axios.post(url, rqService, {
+            timeout: 10000,
             headers: {
                 'Content-Type': 'application/json'
             }
