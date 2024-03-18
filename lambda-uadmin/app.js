@@ -14,7 +14,7 @@ exports.lambdaHandler = async (event, context) => {
             response = responseObject(false, 'Error --> Sin parametro body', null);
         }
     } catch (error) {
-        console.log(error);
+        console.log('Error de ejecucion Lambda Cath', error);
         response = responseObject(false, 'Error de ejecucion Lambda Cath', null);
     }
     console.log('FINISH Lambda Control');

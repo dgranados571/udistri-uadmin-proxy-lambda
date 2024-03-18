@@ -2,11 +2,11 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "uadmin-proxy-lambda"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-mg7ucovldjlo"
-s3_prefix = "uadmin-proxy-lambda"
+stack_name = "LambdaUnAdminFunction"
+s3_bucket = "lambdassam"
+s3_prefix = "lambdaunadminfunction"
 region = "us-east-1"
 confirm_changeset = true
-capabilities = "CAPABILITY_IAM"
+capabilities = "CAPABILITY_NAMED_IAM"
 disable_rollback = true
 image_repositories = []

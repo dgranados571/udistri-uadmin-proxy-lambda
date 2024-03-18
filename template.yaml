@@ -1,36 +1,64 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  udistri-uadmin-proxy-lambda
-  Sample SAM Template for udistri-uadmin-proxy-lambda
-  
-Globals:
-  Function:
-    Timeout: 3
+  LambdaUnAdminFunction
+  Sample SAM Template for uadmin-proxy-lambda
 
 Resources:
   LambdaUnAdminFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: lambda-uadmin/
       Handler: app.lambdaHandler
       Runtime: nodejs20.x
+      CodeUri: lambda-uadmin/
+      Timeout: 7
+      MemorySize: 512
       Architectures:
         - x86_64
+      Role: arn:aws:iam::822754281071:role/LambdaUnAdminFunction-LambdaUnAdminRole-msuzHPbe8iic
       Events:
-        UnAdminProxy:
+        ApiUnAdmin:
           Type: Api
           Properties:
             Path: /unadmin
-            Method: post
+            Method: POST
+
+  LambdaUnAdminRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+
+      Policies:
+        - PolicyName: PermisosLambda
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:PutObject"
+                Resource: "arn:aws:s3:::appuadminbucket/*"
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                Resource: "arn:aws:s3:::appuadminbucket/*"
 
 Outputs:
-  UnAdminApi:
-    Description: "API Gateway endpoint URL for Prod stage for LambdaUnAdminFunction function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/unadmin/"
   LambdaUnAdminFunction:
     Description: "UnAdmin Lambda Function ARN"
     Value: !GetAtt LambdaUnAdminFunction.Arn
-  LambdaUnAdminFunctionIamRole:
-    Description: "Implicit IAM Role created for LambdaUnAdminFunction function"
-    Value: !GetAtt LambdaUnAdminFunctionRole.Arn
