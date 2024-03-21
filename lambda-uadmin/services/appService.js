@@ -4,14 +4,9 @@ const s3 = new AWS.S3();
 let response;
 exports.AppService = async (result) => {
     try {
-        let url = `http://54.210.214.166:8080${result.urlPath}`;
-        let rqService;
-        console.log('Tiene archivos -->', !!result.files);
-        if (!!result.files) {
-            url = `${url}?body=${result.body}`;
-        } else {
-            rqService = JSON.parse(result.body);
-        }
+        const url = `http://54.210.214.166:8080${result.urlPath}`;
+        const rqService = JSON.parse(result.body);
+        console.log('Tiene archivos -->', !!result.files); 
         console.log('URL de peticion back-end', url);
         const ret = await axios.post(url, rqService, {
             timeout: 10000,
