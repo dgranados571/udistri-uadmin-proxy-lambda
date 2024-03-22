@@ -22,7 +22,7 @@ Resources:
           Properties:
             Path: /unadmin
             Method: POST
-
+  
   LambdaUnAdminRole:
     Type: AWS::IAM::Role
     Properties:
@@ -45,18 +45,25 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-        - PolicyName: S3AccessPolicy
+        - PolicyName: LambdaS3ReadWritePolicy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
+                  - "s3:GetObject"
                   - "s3:PutObject"
                 Resource: "arn:aws:s3:::appuadminbucket/*"
-              - Effect: Allow
-                Action:
-                  - "s3:GetObject"
-                Resource: "arn:aws:s3:::appuadminbucket/*"
+
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: appuadminbucket
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
 
 Outputs:
   LambdaUnAdminFunction:
