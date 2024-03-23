@@ -15,7 +15,7 @@ Resources:
       MemorySize: 512
       Architectures:
         - x86_64
-      Role: arn:aws:iam::822754281071:role/LambdaUnAdminFunction-LambdaUnAdminRole-msuzHPbe8iic
+      Role: arn:aws:iam::822754281071:role/LambdaUnAdminFunction-LambdaUnAdminRole-oK0i2ckbqqYy
       Events:
         ApiUnAdmin:
           Type: Api
@@ -33,7 +33,6 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
-
       Policies:
         - PolicyName: PermisosLambda
           PolicyDocument:
@@ -55,7 +54,7 @@ Resources:
                   - "s3:PutObject"
                 Resource: "arn:aws:s3:::appuadminbucket/*"
 
-  MyS3Bucket:
+  S3BucketUnAdmin:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: appuadminbucket
@@ -64,6 +63,24 @@ Resources:
         IgnorePublicAcls: false
         BlockPublicPolicy: false
         RestrictPublicBuckets: false
+  
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: appuadminbucket
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: 
+              - s3:GetObject
+            Resource: 
+              Fn::Join:
+                - ""
+                - - "arn:aws:s3:::"
+                  - Ref: S3BucketUnAdmin
+                  - "/*"
 
 Outputs:
   LambdaUnAdminFunction:
