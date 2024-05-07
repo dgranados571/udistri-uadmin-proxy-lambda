@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { PDFDocument } = require('pdf-lib');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 let response;
@@ -48,6 +49,7 @@ const validacionArchivosS3 = async (result, ret) => {
     let indxArchivo = ret.objeto.totalArchivos;
     console.log('Total de Archivos Existentes --> ', indxArchivo);
     if (!!result.file_0) {
+        console.log('Archivo a Porcesar --> ', result.file_0);
         indxArchivo = indxArchivo + 1
         const { content, contentType } = result.file_0
         const ext = obtenerExtensionDeContentType(contentType)
@@ -120,12 +122,23 @@ const validacionArchivosS3 = async (result, ret) => {
 }
 
 const procesaGuardadoS3 = async (keyFileName, content, contentType) => {
+    const byteArray = new Uint8Array(content.match(/[\da-f]{2}/gi).map(function (h) {
+        const parsedValue = parseInt(h, 16);
+        if (parsedValue < 0 || parsedValue > 255) {
+            throw new Error(`Valor fuera del rango válido para un byte: ${parsedValue}`);
+        }
+        return parsedValue;
+    }));
+    const bytes = Array.from(byteArray);
+
     const params = {
         Bucket: 'appuadminbucket',
         Key: keyFileName,
-        Body: content,
+        Body: JSON.stringify(bytes),
         ContentType: contentType
     };
+    console.log('Parametros Imagen', params);
+
     try {
         const data = await s3.upload(params).promise();
         console.log('Imagen cargada exitosamente', data.Location);
