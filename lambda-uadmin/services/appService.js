@@ -1,14 +1,14 @@
 const axios = require('axios');
-const { PDFDocument } = require('pdf-lib');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 let response;
 exports.AppService = async (result) => {
     try {
-        const url = `http://54.210.214.166:8080${result.urlPath}`;
+        console.log('Service lambda', result);
+        const url = `${result.urlPath}`;
         const rqService = JSON.parse(result.body);
-        console.log('Tiene archivos -->', !!result.files);
         console.log('URL de peticion back-end', url);
+        console.log('Body de peticion back-end', rqService);
         const ret = await axios.post(url, rqService, {
             timeout: 10000,
             headers: {
@@ -24,11 +24,11 @@ exports.AppService = async (result) => {
         if (!!ret) {
             response = responseObject(ret.estado, ret.mensaje, ret.objeto);
         } else {
-            response = responseObject(false, 'Error de consumo Api', null);
+            response = responseObject(false, 'Auth-012', null);
         }
     } catch (error) {
         console.log('Error de ejecucion Lambda Cath', error);
-        response = responseObject(false, 'Error de ejecucion Lambda Cath', null);
+        response = responseObject(false, 'Auth-002-lambda', null);
     }
     return response
 }
