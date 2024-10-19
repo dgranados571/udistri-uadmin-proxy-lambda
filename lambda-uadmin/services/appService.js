@@ -24,11 +24,11 @@ exports.AppService = async (result) => {
         if (!!ret) {
             response = responseObject(ret.estado, ret.mensaje, ret.objeto);
         } else {
-            response = responseObject(false, 'Auth-012', null);
+            response = responseObject(false, 'Error_lambda', null);
         }
     } catch (error) {
         console.log('Error de ejecucion Lambda Cath', error);
-        response = responseObject(false, 'Auth-002-lambda', null);
+        response = responseObject(false, 'Error_lambda', null);
     }
     return response
 }
