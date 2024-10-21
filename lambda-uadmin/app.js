@@ -13,13 +13,11 @@ exports.lambdaHandler = async (event, context) => {
         console.log('START Result form Data', result);
         const fileBase64 = result.file;
         if (!fileBase64) {
-            /*
             console.log('Body result', (!!result.body), result);
             const resObj = await AppService(result);
             const { estado, mensaje, objeto } = resObj.body;
             response = responseObject(estado, mensaje, objeto);
             console.log(response);
-            */
         } else {
             try {
                 const uploadResult = await uploadToS3(result.fileName, fileBase64);
