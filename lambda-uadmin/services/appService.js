@@ -1,6 +1,4 @@
 const axios = require('axios');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
 let response;
 exports.AppService = async (result) => {
     try {
