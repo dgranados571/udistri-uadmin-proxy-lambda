@@ -10,16 +10,16 @@ exports.lambdaHandler = async (event, context) => {
     console.log('START Lambda Control');
     try {
         const result = multipart.parse(event, true)
-        console.log('START Result form Data', result);
         const fileBase64 = result.file;
         if (!fileBase64) {
-            console.log('Body result', (!!result.body), result);
+            console.log('START Result form Data Body', (!!result.body), result);
             const resObj = await AppService(result);
             const { estado, mensaje, objeto } = resObj.body;
             response = responseObject(estado, mensaje, objeto);
             console.log(response);
-        } else {
+        } else {            
             try {
+                console.log('START Result form Data Files', result.fileName, fileBase64.length);
                 const uploadResult = await uploadToS3(result.fileName, fileBase64);
                 response = responseObject(true, 'Archivo cargado exitosamente', uploadResult);
             } catch (error) {
